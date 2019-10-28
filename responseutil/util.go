@@ -36,10 +36,10 @@ func GinResponseObj(o *ResponseObj) gin.H {
 }
 
 // Error response error message
-func Error(c *gin.Context, err error, additionalInfo string) {
+func Error(c *gin.Context, additionalInfo string) {
 	var msg string
-	if err != nil {
-		msg = err.Error() + ":" + additionalInfo
+	if len(additionalInfo) == 0 {
+		msg = "system error occured"
 	} else {
 		msg = additionalInfo
 	}
@@ -49,5 +49,5 @@ func Error(c *gin.Context, err error, additionalInfo string) {
 		msg,
 		nil,
 	}
-	c.JSON(http.StatusInternalServerError, GinResponseObj(&result))
+	c.JSON(http.StatusOK, GinResponseObj(&result))
 }
