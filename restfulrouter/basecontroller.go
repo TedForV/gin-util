@@ -22,7 +22,7 @@ func ginRecover(c *gin.Context, param interface{}) {
 		if logger != nil {
 			logger.WriteError(err, getTrace(), param)
 		}
-		responseutil.Error(c, errors.New("error occured"), "")
+		responseutil.Error(c, "")
 	}
 }
 
