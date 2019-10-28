@@ -4,15 +4,33 @@ import (
 	"errors"
 	"net/http"
 	"reflect"
+	"runtime"
 	"strings"
 
 	"github.com/gin-gonic/gin"
+
+	"github.com/tedforv/gin-util/responseutil"
 )
 
 const (
 	// KeySeperator seperator for keys
 	KeySeperator = ":"
 )
+
+func ginRecover(c *gin.Context, param interface{}) {
+	if err := recover(); err != nil {
+		if logger != nil {
+			logger.WriteError(err, getTrace(), param)
+		}
+		responseutil.Error(c, errors.New("error occured"), "")
+	}
+}
+
+func getTrace() string {
+	var trace [800]byte
+	n := runtime.Stack(trace[:], false)
+	return string(trace[:n])
+}
 
 // IBaseController that satisfies restfulrouter.IBaseController can be
 //auto mapping request to the certain method
@@ -184,24 +202,31 @@ func getControllerValidName(controller IBaseController) (string, error) {
 func autoMapping(router gin.IRouter, controllerName string, controller IBaseController) {
 	path := "/" + controllerName
 	router.GET(path, func(c *gin.Context) {
+		defer ginRecover(c, nil)
 		controller.Get(c)
 	})
 	router.POST(path, func(c *gin.Context) {
+		defer ginRecover(c, nil)
 		controller.Post(c)
 	})
 	router.PUT(path, func(c *gin.Context) {
+		defer ginRecover(c, nil)
 		controller.Post(c)
 	})
 	router.DELETE(path, func(c *gin.Context) {
+		defer ginRecover(c, nil)
 		controller.Post(c)
 	})
 	router.HEAD(path, func(c *gin.Context) {
+		defer ginRecover(c, nil)
 		controller.Post(c)
 	})
 	router.OPTIONS(path, func(c *gin.Context) {
+		defer ginRecover(c, nil)
 		controller.Post(c)
 	})
 	router.PATCH(path, func(c *gin.Context) {
+		defer ginRecover(c, nil)
 		controller.Post(c)
 	})
 }
@@ -219,42 +244,49 @@ func autoCustomMapping(router gin.IRouter, controllerName string, controller IBa
 		case http.MethodGet:
 			func(handler GinHandler) {
 				router.GET(fullPath, func(c *gin.Context) {
+					defer ginRecover(c, nil)
 					handler(c)
 				})
 			}(v)
 		case http.MethodPost:
 			func(handler GinHandler) {
 				router.POST(fullPath, func(c *gin.Context) {
+					defer ginRecover(c, nil)
 					handler(c)
 				})
 			}(v)
 		case http.MethodPut:
 			func(handler GinHandler) {
 				router.PUT(fullPath, func(c *gin.Context) {
+					defer ginRecover(c, nil)
 					handler(c)
 				})
 			}(v)
 		case http.MethodDelete:
 			func(handler GinHandler) {
 				router.DELETE(fullPath, func(c *gin.Context) {
+					defer ginRecover(c, nil)
 					handler(c)
 				})
 			}(v)
 		case http.MethodHead:
 			func(handler GinHandler) {
 				router.HEAD(fullPath, func(c *gin.Context) {
+					defer ginRecover(c, nil)
 					handler(c)
 				})
 			}(v)
 		case http.MethodOptions:
 			func(handler GinHandler) {
 				router.OPTIONS(fullPath, func(c *gin.Context) {
+					defer ginRecover(c, nil)
 					handler(c)
 				})
 			}(v)
 		case http.MethodPatch:
 			func(handler GinHandler) {
 				router.PATCH(fullPath, func(c *gin.Context) {
+					defer ginRecover(c, nil)
 					handler(c)
 				})
 			}(v)
