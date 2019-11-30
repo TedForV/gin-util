@@ -3,6 +3,7 @@ package requestutil
 import (
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/now"
@@ -87,4 +88,24 @@ func GetQueryBool(c *gin.Context, key string, defaultValue bool) bool {
 	valueStr := c.DefaultQuery(key, "")
 	return ConvertBoolenFromString(valueStr, defaultValue)
 
+}
+
+// GetQueryDate get datetime value from url querystring
+func GetQueryDate(c *gin.Context, key string, defaultValue time.Time) time.Time {
+	valueStr := c.DefaultQuery(key, "")
+	unix, err := strconv.ParseInt(valueStr, 10, 64)
+	if err != nil {
+		return defaultValue
+	}
+	return time.Unix(unix, 0)
+}
+
+// GetQueryInt64 get int64 value from url querystring
+func GetQueryInt64(c *gin.Context, key string, defaultValue int64) int64 {
+	valueStr := c.DefaultQuery(key, "")
+	unix, err := strconv.ParseInt(valueStr, 10, 64)
+	if err != nil {
+		return defaultValue
+	}
+	return unix
 }
