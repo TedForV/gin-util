@@ -2,7 +2,9 @@ language: go
 go:
   - "1.14.x"
 script:
-  - go test ./commonfunc
+  - go test ./restfulrouter
+  - go test ./base
+
 notifications:
   email:
     recipients:
