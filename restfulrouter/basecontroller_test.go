@@ -14,29 +14,29 @@ func TestGetControllerValidName(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	assert.Equal(t, "Test", name)
+	assert.Equal(t, "test", name)
 }
 
 func TestAnalyseMappingKey1(t *testing.T) {
-	temp1 := ComposeCustomMappingKey(http.MethodGet, "test/:userName")
-	assert.Equal(t, "GET:test/:userName", temp1)
+	temp1 := ComposeCustomMappingKey(http.MethodGet, "test/:username")
+	assert.Equal(t, "GET:test/:username", temp1)
 	method, path, err := analyseMappingKey(temp1)
 	if err != nil {
 		t.Error(err)
 	}
 	assert.Equal(t, http.MethodGet, method)
-	assert.Equal(t, "test/:userName", path)
+	assert.Equal(t, "test/:username", path)
 }
 
 func TestAnalyseMappingKey2(t *testing.T) {
-	temp1 := ComposeCustomMappingKey(http.MethodGet, "test?_:userName")
-	assert.Equal(t, "GET:test?_:userName", temp1)
+	temp1 := ComposeCustomMappingKey(http.MethodGet, "test?_:username")
+	assert.Equal(t, "GET:test?_:username", temp1)
 	method, path, err := analyseMappingKey(temp1)
 	if err != nil {
 		t.Error(err)
 	}
 	assert.Equal(t, http.MethodGet, method)
-	assert.Equal(t, "test?_:userName", path)
+	assert.Equal(t, "test?_:username", path)
 }
 
 type TestController struct {
